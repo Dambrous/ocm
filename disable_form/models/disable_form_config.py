@@ -10,7 +10,9 @@ class DisableFormConfig(models.Model):
     name = fields.Char(string="Name", required=True)
     view_type = fields.Selection([("form", "Form")], string="View Type", required=True)
     view_id = fields.Many2one("ir.ui.view", "View", required=True)
-    model_id = fields.Many2one("ir.model", string="Model Name", store=True, related="view_id.model_id")
+    model_id = fields.Many2one(
+        "ir.model", string="Model Name", store=True, related="view_id.model_id"
+    )
     model_name = fields.Char(
         related="model_id.model",
         string="Model",

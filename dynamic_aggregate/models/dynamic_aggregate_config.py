@@ -10,16 +10,55 @@ class DynamicAggregateConfig(models.Model):
 
     name = fields.Char(string="Label", required=True)
     company_currency = fields.Many2one(
-        "res.currency", string="Company Currency", compute="_compute_company_currency", compute_sudo=True
+        "res.currency",
+        string="Company Currency",
+        compute="_compute_company_currency",
+        compute_sudo=True,
     )
-    target_result = fields.Many2one('ir.model.fields', string="Target Result", required=True, domain="[('model_id', '=', model_id)]", ondelete='cascade')
-    target_1 = fields.Many2one('ir.model.fields', string="Target 1", required=True, domain="[('model_id', '=', model_id), ('ttype', 'in', ('monetary', 'integer', 'float'))]", ondelete='cascade')
-    target_2 = fields.Many2one('ir.model.fields', string="Target 2", required=True, domain="[('model_id', '=', model_id), ('ttype', 'in', ('monetary', 'integer', 'float'))]", ondelete='cascade')
+    target_result = fields.Many2one(
+        "ir.model.fields",
+        string="Target Result",
+        required=True,
+        domain="[('model_id', '=', model_id)]",
+        ondelete="cascade",
+    )
+    target_1 = fields.Many2one(
+        "ir.model.fields",
+        string="Target 1",
+        required=True,
+        domain="[('model_id', '=', model_id), ('ttype', 'in', ('monetary', 'integer', 'float'))]",
+        ondelete="cascade",
+    )
+    target_2 = fields.Many2one(
+        "ir.model.fields",
+        string="Target 2",
+        required=True,
+        domain="[('model_id', '=', model_id), ('ttype', 'in', ('monetary', 'integer', 'float'))]",
+        ondelete="cascade",
+    )
     model_id = fields.Many2one("ir.model", string="Model Name")
     digits = fields.Integer(required=True)
-    formatter_type = fields.Selection([('float', 'Float'), ('monetary', 'Monetary'), ('integer', 'Integer'), ('percentage', 'Percentage')], required=True)
-    parser_type = fields.Selection([('float', 'Float'), ('monetary', 'Monetary'), ('integer', 'Integer'), ('percentage', 'Percentage')], required=True)
-    operation_type = fields.Selection([('+', '+'), ('-', '-'), ('*', '*'), ('/', '/')], required=True)
+    formatter_type = fields.Selection(
+        [
+            ("float", "Float"),
+            ("monetary", "Monetary"),
+            ("integer", "Integer"),
+            ("percentage", "Percentage"),
+        ],
+        required=True,
+    )
+    parser_type = fields.Selection(
+        [
+            ("float", "Float"),
+            ("monetary", "Monetary"),
+            ("integer", "Integer"),
+            ("percentage", "Percentage"),
+        ],
+        required=True,
+    )
+    operation_type = fields.Selection(
+        [("+", "+"), ("-", "-"), ("*", "*"), ("/", "/")], required=True
+    )
     model_name = fields.Char(
         related="model_id.model",
         string="Model",
@@ -41,41 +80,51 @@ class DynamicAggregateConfig(models.Model):
             value1 = 11.30000
             value2 = 17.10000
 
-            if config.operation_type == '+':
+            if config.operation_type == "+":
                 result = value1 + value2
-            elif config.operation_type == '-':
+            elif config.operation_type == "-":
                 result = value1 - value2
-            elif config.operation_type == '*':
+            elif config.operation_type == "*":
                 result = value1 * value2
-            elif config.operation_type == '/':
+            elif config.operation_type == "/":
                 result = value1 / value2
             result = float_round(result, config.digits)
 
             # Formattare il risultato in base al formatter_type
-            if config.formatter_type == 'float':
+            if config.formatter_type == "float":
                 formatted_result = float_repr(result, config.digits)
-            elif config.formatter_type == 'monetary':
-                formatted_result = self.env['ir.qweb.field.monetary'].value_to_html(result, {
-                    'decimal_precision': config.digits})
-            elif config.formatter_type == 'integer':
+            elif config.formatter_type == "monetary":
+                formatted_result = self.env["ir.qweb.field.monetary"].value_to_html(
+                    result, {"decimal_precision": config.digits}
+                )
+            elif config.formatter_type == "integer":
                 formatted_result = int(result)
-            elif config.formatter_type == 'percentage':
-                formatted_result = float_repr(result * 100, config.digits) + '%'
+            elif config.formatter_type == "percentage":
+                formatted_result = float_repr(result * 100, config.digits) + "%"
 
-            config.operation_example = "11.300,00 " + str(config.operation_type) + " 17.100,00 = " + str(result) + " | formatted --> " + str(formatted_result)
+            config.operation_example = (
+                "11.300,00 "
+                + str(config.operation_type)
+                + " 17.100,00 = "
+                + str(result)
+                + " | formatted --> "
+                + str(formatted_result)
+            )
 
     @api.model
     def get_configs(self, model_name):
-        result_configs = self.env['dynamic.aggregate.config'].search([('model_name', '=', model_name)])
+        result_configs = self.env["dynamic.aggregate.config"].search(
+            [("model_name", "=", model_name)]
+        )
         configs = {
-            'currency_id': self.env.company.currency_id.id,
-            'operation': result_configs.operation_type,
-            'target_result': result_configs.target_result.name,
-            'label': result_configs.name,
-            'target_1': result_configs.target_1.name,
-            'target_2': result_configs.target_2.name,
-            'digits': result_configs.digits,
-            'format_type': result_configs.formatter_type,
-            'parser_type': result_configs.parser_type
+            "currency_id": self.env.company.currency_id.id,
+            "operation": result_configs.operation_type,
+            "target_result": result_configs.target_result.name,
+            "label": result_configs.name,
+            "target_1": result_configs.target_1.name,
+            "target_2": result_configs.target_2.name,
+            "digits": result_configs.digits,
+            "format_type": result_configs.formatter_type,
+            "parser_type": result_configs.parser_type,
         }
         return configs

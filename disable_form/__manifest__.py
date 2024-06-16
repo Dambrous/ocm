@@ -16,6 +16,6 @@
         "views/disable_form_config_views.xml",
     ],
     "assets": {
-        "web.assets_backend": ['disable_form/static/src/views/**/*'],
+        "web.assets_backend": ["disable_form/static/src/views/**/*"],
     },
 }

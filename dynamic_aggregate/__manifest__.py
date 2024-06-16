@@ -17,7 +17,7 @@
     ],
     "assets": {
         "web.assets_backend": [
-            'dynamic_aggregate/static/src/views/**/*',
+            "dynamic_aggregate/static/src/views/**/*",
         ],
     },
 }
