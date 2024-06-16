@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="disable_form_config_form_view" model="ir.ui.view">
+        <field name="name">disable.form.config.form</field>
+        <field name="model">disable.form.config</field>
+        <field name="arch" type="xml">
+            <form string="Disable Form Configurations">
+                <group>
+                    <group string="General Settings" class="col-3">
+                        <field name="name"/>
+                    </group>
+                    <group string="View Info">
+                        <field name="view_type"/>
+                        <field name="view_id" options="{'no_create': True, 'no_open': True}"/>
+                        <field name="model_id" options="{'no_create': True, 'no_open': True}"/>
+                        <field name="model_name"/>
+                        <field name="xml_id"/>
+                    </group>
+                    <group string="Domain">
+                        <field name="disable_form_domain" widget="domain"
+                               options="{'model': 'model_name', 'in_dialog': True}"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="disable_form_config_tree_view" model="ir.ui.view">
+        <field name="name">disable.form.config.tree</field>
+        <field name="model">disable.form.config</field>
+        <field name="arch" type="xml">
+            <tree string="Disable Form Configurations">
+                <field name="name"/>
+                <field name="view_id"/>
+                <field name="view_type"/>
+                <field name="model_id"/>
+                <field name="xml_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_disable_form_config" model="ir.actions.act_window">
+        <field name="name">Disable Form Configuration</field>
+        <field name="res_model">disable.form.config</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{
+            "group_by": "model_id"}
+        </field>
+    </record>
+
+    <menuitem id="disable_form_config_app_menu_root"
+              name="Disable Form Configurations"
+              web_icon="disable_form,static/description/icon.png"
+              sequence="100">
+    </menuitem>
+
+    <menuitem
+            id="disable_form_app_menu"
+            parent="disable_form_config_app_menu_root"
+            name="Disable Form Configurations"
+            action="action_disable_form_config"/>
+
+</odoo>
