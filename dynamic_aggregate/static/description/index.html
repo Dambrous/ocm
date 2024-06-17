@@ -1,0 +1,147 @@
+<h1 id="dynamic-aggregate">Dynamic Aggregate</h1>
+<p>The Dynamic Aggregate module facilitates dynamic aggregation under
+    the list/tree view in Odoo. Users can define configurations to compute
+    values based on specified operations and columns, and display the
+    computed result in a chosen target column.</p>
+<ul>
+    <li><p>Example: Percentage (Total sum of one column divide by the total
+        sum of another column and formatted with the percentage</p>
+        <blockquote>
+            <p><img src="readme/image1.png" width="1000" alt="image"/></p>
+        </blockquote>
+    </li>
+    <li><p>Example: Multiplication (Total sum of one column multiplied by
+        the total sum of another column and formatted with the currency symbol
+        (selected)</p>
+        <blockquote>
+            <p><img src="readme/image2.png" width="1000" alt="image"/></p>
+        </blockquote>
+    </li>
+    <li><p>Example: Sum (Maximum value of one column + minimum of another
+        column formatted as float</p>
+        <blockquote>
+            <p><img src="readme/image3.png" width="1000" alt="image"/></p>
+        </blockquote>
+    </li>
+</ul>
+<h2 id="configuration">Configuration</h2>
+<p>After installing the <span class="title-ref">dynamic_aggregate</span>
+    module, follow these steps to configure it:</p>
+<ol type="1">
+    <li>Navigate to <span class="title-ref">Settings</span> -&gt; <span
+            class="title-ref">Dynamic Aggregate Settings</span>.
+    </li>
+    <li>Click <span class="title-ref">Create</span> to add a new aggregation
+        configuration.
+    </li>
+    <li>Configure the following settings:
+        <ul>
+            <li><strong>Label</strong>: Select the label of field when hovering over
+                the result.
+            </li>
+            <li><strong>Model</strong>: Select the model for which you want to
+                configure dynamic aggregation.
+            </li>
+            <li><strong>Target Column</strong>: Choose the target column where the
+                computed value should be displayed.
+            </li>
+            <li><strong>Operation</strong>: Select from addition (+), subtraction
+                (-), division (/), or multiplication (*).
+            </li>
+            <li><strong>Target 1</strong>: Choose first target of operation (must be
+                of type float, integer, or monetary).
+            </li>
+            <li><strong>Target 2</strong>: Choose second target of operation (must
+                be of type float, integer, or monetary).
+            </li>
+            <li><strong>Target 1 Aggregate Function</strong>: Select the aggregation
+                function for each of the chosen columns (<span
+                        class="title-ref">sum</span>, <span class="title-ref">avg</span>, <span
+                        class="title-ref">min</span>, <span class="title-ref">max</span>)
+            </li>
+            <li><strong>Target 2 Aggregate Function</strong>: Select the aggregation
+                function for each of the chosen columns (<span
+                        class="title-ref">sum</span>, <span class="title-ref">avg</span>, <span
+                        class="title-ref">min</span>, `max)
+            </li>
+            <li><strong>Format Type</strong>: Choose the formatting type for the
+                computed value (monetary, float, integer, percentage).
+            </li>
+            <li><strong>Digits</strong>: Specify the number of decimal places for
+                the formatted result.
+            </li>
+        </ul>
+    </li>
+    <li>Save the configuration.</li>
+</ol>
+<h2 id="usage-example">Usage Example</h2>
+<p>Suppose you want to calculate the exact percentage between two
+    columns by taking the sum of each column and formatting it as a
+    percentage. Here’s how you can configure it:</p>
+<ol type="1">
+    <li><p>Navigate to the <span class="title-ref">Dynamic Aggregate</span>
+        module from the homepage.</p></li>
+    <li><p>Create a new configuration:</p>
+        <ul>
+            <li><strong>Model</strong>: Choose the model(in this case
+                sale.planning.line).
+            </li>
+            <li><strong>Target Column</strong>: Select the target column where you
+                want to display the percentage.
+            </li>
+            <li><strong>Operation</strong>: Choose <span class="title-ref">/</span>
+                (division).
+            </li>
+            <li><strong>Target 1</strong>: Select the first target of the first
+                dataset.
+            </li>
+            <li><strong>Target 2</strong>: Select the second target of the second
+                dataset.
+            </li>
+            <li><strong>Target 1/2 Aggregate Function</strong>: Choose <span
+                    class="title-ref">sum</span> for both target columns.
+            </li>
+            <li><strong>Format Type</strong>: Select <span
+                    class="title-ref">percentage</span>.
+            </li>
+            <li><strong>Decimal Precision</strong>: Specify the precision (e.g., 2
+                for two decimal places).
+            </li>
+        </ul>
+    </li>
+    <li><p>Save the configuration.</p>
+        <blockquote>
+            <p><img src="readme/image4.png" width="1000" alt="image"/></p>
+            <p><img src="readme/image1.png" width="1000" alt="image"/></p>
+        </blockquote>
+    </li>
+</ol>
+<p>In this example, the module computes the exact percentage between the
+    sums of two columns and displays the result formatted as a percentage,
+    which Odoo does not directly support.</p>
+<h2 id="features">Features</h2>
+<ul>
+    <li>Dynamic aggregation of data under list/tree view in Odoo.</li>
+    <li>Supports operations such as addition, subtraction, division, and
+        multiplication.
+    </li>
+    <li>Allows selection of columns and their respective aggregation methods
+        (sum, min, max, avg).
+    </li>
+    <li>Flexible formatting options including monetary, float, integer, and
+        percentage with customizable decimal precision.
+    </li>
+</ul>
+<p><strong>IMPORTANT: Aggregates can only be managed in the list
+    view.</strong></p>
+<h2 id="maintainers">Maintainers</h2>
+<p>This module is maintained by Rapsodoo.</p>
+<p><a href="https://www.rapsodoo.com"><img src="rapsodoo_icon.png"
+                                           alt="Rapsodoo"/></a></p>
+<div class="line-block">Rapsodoo is one of Odoo Europe's leading
+    partners focusing on large and mid-sized enterprises. It is developed by
+    a team of senior entrepreneurs and investors with the "crazy dream" of
+    bringing together younger entrepreneurs and talented individuals to
+    build a unique, inspired, focused, and enjoyable international
+    group.
+</div>
