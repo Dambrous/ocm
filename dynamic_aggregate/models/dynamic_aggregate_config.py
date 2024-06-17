@@ -29,6 +29,7 @@ class DynamicAggregateConfig(models.Model):
         domain="[('model_id', '=', model_id), ('ttype', 'in', ('monetary', 'integer', 'float'))]",
         ondelete="cascade",
     )
+    target_1_aggregate = fields.Selection([('min', 'Min'), ('max', 'Max'), ('sum', 'Sum'), ('avg', 'Avg')])
     target_2 = fields.Many2one(
         "ir.model.fields",
         string="Target 2",
@@ -36,6 +37,7 @@ class DynamicAggregateConfig(models.Model):
         domain="[('model_id', '=', model_id), ('ttype', 'in', ('monetary', 'integer', 'float'))]",
         ondelete="cascade",
     )
+    target_2_aggregate = fields.Selection([('min', 'Min'), ('max', 'Max'), ('sum', 'Sum'), ('avg', 'Avg')])
     model_id = fields.Many2one("ir.model", string="Model Name")
     digits = fields.Integer(required=True)
     formatter_type = fields.Selection(
@@ -123,7 +125,9 @@ class DynamicAggregateConfig(models.Model):
             "target_result": result_configs.target_result.name,
             "label": result_configs.name,
             "target_1": result_configs.target_1.name,
+            "target_1_function_aggregate" : result_configs.target_1_aggregate,
             "target_2": result_configs.target_2.name,
+            "target_2_function_aggregate" : result_configs.target_2_aggregate,
             "digits": result_configs.digits,
             "format_type": result_configs.formatter_type,
             "parser_type": result_configs.parser_type,

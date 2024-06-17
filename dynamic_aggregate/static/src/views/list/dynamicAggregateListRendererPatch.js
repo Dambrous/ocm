@@ -15,83 +15,114 @@ patch(ListRenderer.prototype, {
     async setup() {
         super.setup(...arguments);
         this.orm = useService("orm");
-        const self = this;
         onWillStart(async () => {
-            let model = self.props.list.resModel;
-            self.configs = await this.orm.call("dynamic.aggregate.config", "get_configs", [[model]]);
+            let model = this.props.list.resModel;
+            this.configs = await this.orm.call("dynamic.aggregate.config", "get_configs", [[model]]);
         });
     },
 
-    createPercentageAggregate(result, percentageConfigs) {
+    calculateAggregateResult(function_aggregate, fieldValues) {
+        let aggregateValue = 0;
+        if (function_aggregate === "max") {
+            aggregateValue = Math.max(-Infinity, ...fieldValues);
+        } else if (function_aggregate === "min") {
+            aggregateValue = Math.min(Infinity, ...fieldValues);
+        } else if (function_aggregate === "avg") {
+            aggregateValue =
+                fieldValues.reduce((acc, val) => acc + val) / fieldValues.length;
+        } else if (function_aggregate === "sum") {
+            aggregateValue = fieldValues.reduce((acc, val) => acc + val);
+        }
+        return aggregateValue
+    },
+
+    getAggregatesValues(configs) {
+        let values;
+        if (this.props.list.selection && this.props.list.selection.length) {
+            values = this.props.list.selection.map((r) => r.data);
+        } else if (this.props.list.isGrouped) {
+            values = this.props.list.groups.map((g) => g.aggregates);
+        } else {
+            values = this.props.list.records.map((r) => r.data);
+        }
+        for (const column of this.allColumns) {
+            const fieldName = column['name'];
+            if (fieldName === configs.target_1) {
+                const fieldValues = values.map((v) => v[fieldName]).filter((v) => v || v === 0);
+                this.target_1_result = this.calculateAggregateResult(configs['target_1_function_aggregate'], fieldValues );
+            } else if (fieldName === configs.target_2) {
+                const fieldValues = values.map((v) => v[fieldName]).filter((v) => v || v === 0);
+                this.target_2_result = this.calculateAggregateResult(configs['target_2_function_aggregate'], fieldValues);
+            }
+        }
+    },
+
+    createAggregate(result, aggregateConfigs) {
         let extraResult = {};
-        if (percentageConfigs) {
-            let target_result = percentageConfigs['target_result'];
+        if (aggregateConfigs) {
+            let target_result = aggregateConfigs['target_result'];
             if (!target_result) {
                 return extraResult
             }
-            let label = percentageConfigs['label'];
-            let target_1_key = percentageConfigs['target_1'];
-            let target_2_key = percentageConfigs['target_2'];
-            let operation = percentageConfigs['operation'];
+            let label = aggregateConfigs['label'];
+            let target_1_key = aggregateConfigs['target_1'];
+            let target_2_key = aggregateConfigs['target_2'];
+            let operation = aggregateConfigs['operation'];
             let result_value = false;
             const formatOptions = {
-                digits: [2, percentageConfigs['digits']],
-                currencyId: percentageConfigs['currency_id'],
+                digits: [2, aggregateConfigs['digits']],
+                currencyId: aggregateConfigs['currency_id'],
             };
 //          required fields
-            const formatterTargetResult = percentageConfigs['format_type'];
-            const parserTargetResult = percentageConfigs['parser_type'];
+            const formatterTargetResult = aggregateConfigs['format_type'];
+            const parserTargetResult = aggregateConfigs['parser_type'];
             const formatter = formatters.get(formatterTargetResult);
             const parser = parsers.get(parserTargetResult);
 
-            if (result.hasOwnProperty(target_1_key) && result.hasOwnProperty(target_2_key)) {
-                let target_1 = parser(result[target_1_key]['value']);
-                let target_2 = parser(result[target_2_key]['value']);
-                switch (operation) {
-                    case "*":
-                        result_value = target_1 * target_2;
-                        break;
-                    case "+":
-                        result_value = target_1 + target_2;
-                        break;
-                    case "-":
-                        result_value = target_1 - target_2;
-                        break;
-                    case "/":
-                        if (target_2 !== 0) {
-                            result_value = target_1 / target_2;
-                        } else {
-                            result_value = 'NaN'; // or any other value to indicate division by zero
-                        }
-                        break;
-                    case "%":
-                        if (target_2 !== 0) {
-                            result_value = (target_1 / target_2);
-                        } else {
-                            result_value = 'NaN'; // or any other value to indicate modulo by zero
-                        }
-                        break;
-                }
-                let formatted_value = formatter(result_value, formatOptions);
-                extraResult[target_result] = {
-                    'help': label,
-                    'value': formatted_value,
-                };
+//            let target_1 = parser(this.target_1_result);
+//            let target_2 = parser(this.target_2_result);
+            switch (operation) {
+                case "*":
+                    result_value = this.target_1_result * this.target_2_result;
+                    break;
+                case "+":
+                    result_value = this.target_1_result + this.target_2_result;
+                    break;
+                case "-":
+                    result_value = this.target_1_result - this.target_2_result;
+                    break;
+                case "/":
+                    if (this.target_2_result !== 0) {
+                        result_value = this.target_1_result / this.target_2_result;
+                    } else {
+                        result_value = 'NaN'; // or any other value to indicate division by zero
+                    }
+                    break;
+                case "%":
+                    if (this.target_2_result !== 0) {
+                        result_value = (this.target_1_result / this.target_2_result);
+                    } else {
+                        result_value = 'NaN'; // or any other value to indicate modulo by zero
+                    }
+                    break;
             }
+            let formatted_value = formatter(result_value, formatOptions);
+            extraResult[target_result] = {
+                'help': label,
+                'value': formatted_value,
+            };
         }
         return extraResult;
     },
+
     /**
         * @override
     */
 
-    async computeAggregates(result) {
-        return await this.createPercentageAggregate(result);
-    },
-
     get aggregates() {
         let result = super.aggregates;
-        let extra = this.createPercentageAggregate(result, this.configs)
+        let values = this.getAggregatesValues(this.configs)
+        let extra = this.createAggregate(result, this.configs)
         return Object.assign(result, extra);
     }
 });

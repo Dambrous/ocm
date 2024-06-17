@@ -16,7 +16,9 @@
                     <group string="Target Settings">
                         <field name="target_result"/>
                         <field name="target_1"/>
+                        <field name="target_1_aggregate"/>
                         <field name="target_2"/>
+                        <field name="target_2_aggregate"/>
                         <field name="operation_type"/>
                         <field name="formatter_type"/>
                         <field name="parser_type" invisible="1"/>
