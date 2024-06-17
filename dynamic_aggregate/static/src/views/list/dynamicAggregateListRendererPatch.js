@@ -18,12 +18,8 @@ patch(ListRenderer.prototype, {
         const self = this;
         onWillStart(async () => {
             let model = self.props.list.resModel;
-            self.configs = await this.fetchPercentageConfig(model);
+            self.configs = await this.orm.call("dynamic.aggregate.config", "get_configs", [[model]]);
         });
-    },
-
-    async fetchPercentageConfig(model) {
-        return await this.orm.call("dynamic.aggregate.config", "get_configs", [[model]]);
     },
 
     createPercentageAggregate(result, percentageConfigs) {
