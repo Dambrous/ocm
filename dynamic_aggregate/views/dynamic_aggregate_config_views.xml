@@ -24,7 +24,7 @@
                     </group>
                 </group>
                 <group string="Operation Example">
-                    <field name="operation_example" widget="aggregate_example"/>
+                    <field name="operation_example"/>
                 </group>
             </form>
         </field>

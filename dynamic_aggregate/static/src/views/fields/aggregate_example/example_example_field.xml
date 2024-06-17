@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
 
-    <t t-name="web.AggregateExample">
-<!--        <span>Pippo</span>-->
-        <span t-esc="formattedExample"/>
-<!--        <span t-if="!props.noLabel" class="o_stat_text" t-esc="label"/>-->
-    </t>
+  <t t-name="web.AggregateExample">
+    <span t-esc="formattedExample" />
+    <span t-if="!props.noLabel" class="o_stat_text" t-esc="label" />
+  </t>
 
 </templates>

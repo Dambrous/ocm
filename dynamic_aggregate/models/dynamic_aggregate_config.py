@@ -55,6 +55,7 @@ class DynamicAggregateConfig(models.Model):
             ("percentage", "Percentage"),
         ],
         required=True,
+        default="float"
     )
     operation_type = fields.Selection(
         [("+", "+"), ("-", "-"), ("*", "*"), ("/", "/")], required=True
