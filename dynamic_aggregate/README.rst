@@ -14,7 +14,7 @@ The Dynamic Aggregate module facilitates dynamic aggregation under the list/tree
     .. image:: readme/image2.png
         :width: 1000
 
-* Example: Sum (Maximum value of one column + minimum of another column formatted as float
+* Example: Sum (Maximum value of one column + minimum of another column formatted as float)
 
     .. image:: readme/image3.png
         :width: 1000
