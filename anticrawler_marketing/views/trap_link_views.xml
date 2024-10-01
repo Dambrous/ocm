@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="trap_link_tree_view" model="ir.ui.view">
+        <field name="name">Trap Links tree view</field>
+        <field name="model">trap.link</field>
+        <field name="arch" type="xml">
+            <tree string="Trap Links">
+                <field name="url"/>
+                <field name="enable_trap"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="trap_link_tree_action" model="ir.actions.act_window">
+        <field name="name">Trap Links</field>
+        <field name="res_model">trap.link</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="trap_links_menu"
+              name="Trap Links"
+              action="anticrawler_marketing.trap_link_tree_action"
+              sequence="50"
+              parent="mass_mailing.mass_mailing_configuration"/>
+
+    <record id="bot_cached_tree_view" model="ir.ui.view">
+        <field name="name">bot cached tree view</field>
+        <field name="model">bot.cached</field>
+        <field name="arch" type="xml">
+            <tree string="Bot Cached">
+                <field name="ip"/>
+                <field name="url"/>
+                <field name="last_connection_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="bot_cached_action" model="ir.actions.act_window">
+        <field name="name">Bot Cached</field>
+        <field name="res_model">bot.cached</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="bot_cached_menu"
+              name="Bot Cached"
+              action="anticrawler_marketing.bot_cached_action"
+              sequence="51"
+              parent="mass_mailing.mass_mailing_configuration"/>
+
+</odoo>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="link_tracker_view_form" model="ir.ui.view">
+        <field name="name">link.tracker.view.form.inherit.mail</field>
+        <field name="model">link.tracker</field>
+        <field name="inherit_id" ref="link_tracker.link_tracker_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='source_id']" position="after">
+                <field name="is_trap_for_bot"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
